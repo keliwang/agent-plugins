@@ -1,0 +1,15 @@
+{
+  "name": "keliwang",
+  "owner": { "name": "keliwang", "email": "keliw2025@keli.im" },
+  "metadata": {
+    "description": "Claude Code plugins by keliwang"
+  },
+  "plugins": [
+    {
+      "name": "token-meter",
+      "source": "./plugins/token-meter",
+      "description": "Status line with in/out tokens and prompt-cache hit rate for the main loop and subagents",
+      "category": "productivity"
+    }
+  ]
+}

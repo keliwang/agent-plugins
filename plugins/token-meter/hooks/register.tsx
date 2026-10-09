@@ -7,6 +7,7 @@ import type { Tone } from './stats'
 
 const last = atom({ plugin: 'token-meter', key: 'last' } as const, null)
 const agents = atom({ plugin: 'token-meter', key: 'agents' } as const, {})
+const total = atom({ plugin: 'token-meter', key: 'total' } as const, empty())
 
 const COLOR: Record<Tone, string> = { good: 'green', warn: 'yellow', bad: 'red' }
 
@@ -15,7 +16,7 @@ const blankAgent = (): AgentBucket => ({ last: empty(), type: 'agent', done: fal
 export const register: Register = on => {
   // Drawn above the prompt; the atom writes below redraw it.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const segs = line(await read($, last), await read($, agents))
+    const segs = line(await read($, last), await read($, agents), await read($, total))
     if (e.props.hasSurvey || segs === undefined) return next(e)
     const { Box, Text } = $.ui.resolve(e)
     return (
@@ -33,6 +34,7 @@ export const register: Register = on => {
     const u = r.usage
     if (u) {
       const cur = add(empty(), u)
+      await update($, total, t => add(t, u))
       const id = e.agentId
       if (id === undefined) {
         await update($, last, () => cur)
@@ -67,6 +69,7 @@ export const register: Register = on => {
     if (e.reason === 'clear') {
       await update($, last, () => null)
       await update($, agents, () => ({}))
+      await update($, total, () => empty())
     }
     return next(e)
   })

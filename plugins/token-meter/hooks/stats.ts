@@ -30,20 +30,25 @@ const req = (b: Bucket): Seg[] => [
   { text: `${Math.round(ratio(b) * 100)}%`, tone: tone(ratio(b)) },
 ]
 
-/** The line as runs of text, or undefined before the first request. */
+/** The line as runs of text, or undefined before the first request:
+ *  the latest requests, then ` | ` and the session's running total. */
 export const line = (
   last: Bucket | null,
   agents: Readonly<Record<string, AgentBucket>>,
+  total: Bucket,
 ): Seg[] | undefined => {
   const running = Object.values(agents).filter(a => !a.done && a.last?.reqs > 0)
-  if (last === null && running.length === 0) return undefined
+  if (last === null && running.length === 0 && total.reqs === 0) return undefined
 
   const segs: Seg[] = []
   if (last !== null) segs.push(...req(last))
   for (const a of running) {
     if (segs.length > 0) segs.push({ text: '   ' })
-    segs.push({ text: `${a.type} ` }, ...req(a.last))
+    // Lowercased to match `session`: built-in types mix `Explore` and `general-purpose`.
+    segs.push({ text: `${a.type.toLowerCase()} ` }, ...req(a.last))
   }
+  if (segs.length > 0) segs.push({ text: ' | ' })
+  segs.push({ text: `session ↑${fmt(total.in - total.read)} ↓${fmt(total.out)}` })
   return segs
 }
 

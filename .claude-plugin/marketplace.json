@@ -8,7 +8,7 @@
     {
       "name": "token-meter",
       "source": "./plugins/token-meter",
-      "description": "Status line with in/out tokens and prompt-cache hit rate for the main loop and subagents",
+      "description": "Status line with per-request in/out tokens and prompt-cache hit rate, plus session totals",
       "category": "productivity"
     }
   ]

@@ -10,6 +10,8 @@ declare module 'claude-code' {
       /** The main loop's latest request. */
       last: Bucket | null
       agents: Record<string, AgentBucket>
+      /** Every request this session, main loop and subagents. */
+      total: Bucket
     }
   }
 }

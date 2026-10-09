@@ -1,7 +1,7 @@
 {
   "name": "token-meter",
-  "version": "0.1.0",
-  "description": "Status line with in/out tokens and prompt-cache hit rate for the main loop and subagents",
+  "version": "0.2.0",
+  "description": "Status line with per-request in/out tokens and prompt-cache hit rate, plus session totals",
   "author": { "name": "keliwang", "email": "keliw2025@keli.im" },
   "homepage": "https://github.com/keliwang/agent-plugins/tree/main/plugins/token-meter",
   "repository": "https://github.com/keliwang/agent-plugins",

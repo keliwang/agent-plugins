@@ -6,7 +6,7 @@ Claude Code plugins by [keliwang](https://github.com/keliwang).
 
 | Plugin | Description |
 | --- | --- |
-| [token-meter](plugins/token-meter) | Status line with in/out tokens and prompt-cache hit rate for the main loop and subagents |
+| [token-meter](plugins/token-meter) | Status line with per-request in/out tokens and prompt-cache hit rate, plus session totals |
 
 ## Install
 

@@ -9,10 +9,11 @@ const last = atom({ plugin: 'token-meter', key: 'last' } as const, null)
 const agents = atom({ plugin: 'token-meter', key: 'agents' } as const, {})
 const ctx = atom({ plugin: 'token-meter', key: 'ctx' } as const, null)
 
+// Theme keys, so the colours follow the person's light or dark theme.
 const STYLE = {
-  good: { color: 'green', bold: true },
-  warn: { color: 'yellow', bold: true },
-  bad: { color: 'red', bold: true },
+  good: { color: 'success', bold: true },
+  warn: { color: 'warning', bold: true },
+  bad: { color: 'error', bold: true },
   dim: { dimColor: true },
 } as const satisfies Record<Tone, object>
 

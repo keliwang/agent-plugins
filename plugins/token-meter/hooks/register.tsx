@@ -7,25 +7,38 @@ import type { Tone } from './stats'
 
 const last = atom({ plugin: 'token-meter', key: 'last' } as const, null)
 const agents = atom({ plugin: 'token-meter', key: 'agents' } as const, {})
-const total = atom({ plugin: 'token-meter', key: 'total' } as const, empty())
+const ctx = atom({ plugin: 'token-meter', key: 'ctx' } as const, null)
 
-const COLOR: Record<Tone, string> = { good: 'green', warn: 'yellow', bad: 'red' }
+const STYLE = {
+  good: { color: 'green', bold: true },
+  warn: { color: 'yellow', bold: true },
+  bad: { color: 'red', bold: true },
+  dim: { dimColor: true },
+} as const satisfies Record<Tone, object>
 
 const blankAgent = (): AgentBucket => ({ last: empty(), type: 'agent', done: false })
 
 export const register: Register = on => {
   // Drawn above the prompt; the atom writes below redraw it.
+  // Only the CLI shows `ctx`; the other surfaces draw their own context meter.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const segs = line(await read($, last), await read($, agents), await read($, total))
+    const fill = e.surface === 'terminal' ? await read($, ctx) : null
+    const segs = line(await read($, last), await read($, agents), fill)
     if (e.props.hasSurvey || segs === undefined) return next(e)
     const { Box, Text } = $.ui.resolve(e)
     return (
       <Box marginTop={1}>
-        <Text dimColor>
-          {segs.map((s, i) => (s.tone ? <Text key={`${i}`} color={COLOR[s.tone]}>{s.text}</Text> : s.text))}
+        <Text>
+          {segs.map((s, i) => (s.tone ? <Text key={`${i}`} {...STYLE[s.tone]}>{s.text}</Text> : s.text))}
         </Text>
       </Box>
     )
+  })
+
+  // The context window's fill, as the status line reads it; absent until a response.
+  on('session.measure', async ($, e, next) => {
+    if (e.changed.includes('context')) await update($, ctx, () => e.context.percent ?? null)
+    return next(e)
   })
 
   // One model request; its usage arrives with the step's result.
@@ -34,7 +47,6 @@ export const register: Register = on => {
     const u = r.usage
     if (u) {
       const cur = add(empty(), u)
-      await update($, total, t => add(t, u))
       const id = e.agentId
       if (id === undefined) {
         await update($, last, () => cur)
@@ -69,7 +81,7 @@ export const register: Register = on => {
     if (e.reason === 'clear') {
       await update($, last, () => null)
       await update($, agents, () => ({}))
-      await update($, total, () => empty())
+      await update($, ctx, () => null)
     }
     return next(e)
   })

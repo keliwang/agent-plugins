@@ -2,13 +2,12 @@ import type { ModelUsage } from 'claude-code'
 
 import type { AgentBucket, Bucket } from '../types'
 
-export const empty = (): Bucket => ({ in: 0, out: 0, read: 0, write: 0, reqs: 0 })
+export const empty = (): Bucket => ({ in: 0, out: 0, read: 0, reqs: 0 })
 
 export const add = (b: Bucket, u: ModelUsage): Bucket => ({
   in: b.in + u.input_tokens + u.cache_read_input_tokens + u.cache_creation_input_tokens,
   out: b.out + u.output_tokens,
   read: b.read + u.cache_read_input_tokens,
-  write: b.write + u.cache_creation_input_tokens,
   reqs: b.reqs + 1,
 })
 
@@ -32,19 +31,18 @@ const dim = (text: string): Seg => ({ text, tone: 'dim' })
 const SEP = dim(' | ')
 const GAP: Seg = { text: '   ' }
 
-/** `in 50 out 300 | cache 4.0K +1.1K hit 77%`: uncached input, output, cache reads,
- *  cache writes when any, and the share of input the cache served. */
+/** `in 1.2K out 300 | cache 4.0K hit 77%`: input the cache did not serve (uncached
+ *  plus cache writes), output, cache reads, and the share of input the cache served. */
 const req = (b: Bucket): Seg[] => {
   const segs: Seg[] = [
     dim('in '),
-    { text: fmt(b.in - b.read - b.write), tone: 'good' },
+    { text: fmt(b.in - b.read), tone: 'good' },
     dim(' out '),
     { text: fmt(b.out), tone: 'good' },
     SEP,
     dim('cache '),
     { text: fmt(b.read), tone: 'warn' },
   ]
-  if (b.write > 0) segs.push(dim(' +'), { text: fmt(b.write), tone: 'warn' })
   segs.push(dim(' hit '))
   if (b.in === 0) {
     segs.push(dim('--'))

@@ -1,5 +1,5 @@
 /** Token counts summed over requests. `in` includes cache reads and writes. */
-export type Bucket = { in: number; out: number; read: number; write: number; reqs: number }
+export type Bucket = { in: number; out: number; read: number; reqs: number }
 
 /** One subagent: its latest request, its type, whether its run completed. */
 export type AgentBucket = { last: Bucket; type: string; done: boolean }

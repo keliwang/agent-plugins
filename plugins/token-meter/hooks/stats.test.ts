@@ -24,7 +24,7 @@ test('shows the latest request and running subagents', async () => {
     a2: { last: one(500, 300, 0, 500), type: 'Plan', done: true },
   }
   const segs = line(last, agents)!
-  expect(plain(segs)).toBe('in 50 out 300 | cache 4.0K +1.1K hit 77%   explore in 100 out 200 | cache 900 hit 90%')
+  expect(plain(segs)).toBe('in 1.2K out 300 | cache 4.0K hit 77%   explore in 100 out 200 | cache 900 hit 90%')
   expect(segs.filter(s => s.text.endsWith('%')).map(s => [s.text, s.tone])).toEqual([
     ['77%', 'warn'],
     ['90%', 'good'],
@@ -33,7 +33,7 @@ test('shows the latest request and running subagents', async () => {
 
 test('shows ctx after the latest request when given', async () => {
   const last = one(50, 300, 4000, 1150)
-  expect(plain(line(last, {}, 12)!)).toBe('in 50 out 300 | cache 4.0K +1.1K hit 77% | ctx 12%')
+  expect(plain(line(last, {}, 12)!)).toBe('in 1.2K out 300 | cache 4.0K hit 77% | ctx 12%')
   expect(line(last, {}, 72)!.find(s => s.text === 'ctx 72%')?.tone).toBe('warn')
   expect(line(last, {}, 90)!.find(s => s.text === 'ctx 90%')?.tone).toBe('bad')
   expect(plain(line(last, {}, null)!)).not.toContain('ctx')

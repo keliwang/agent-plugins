@@ -6,7 +6,7 @@ Claude Code plugins by [keliwang](https://github.com/keliwang).
 
 | Plugin | Description |
 | --- | --- |
-| [token-meter](plugins/token-meter) | Status line with per-request in/out tokens and prompt-cache hit rate, plus session totals |
+| [token-meter](plugins/token-meter) | Status-line-style band with per-request in/out tokens, prompt-cache hit rate and context fill, in the CLI only |
 
 ## Install
 

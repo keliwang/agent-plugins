@@ -8,7 +8,7 @@
     {
       "name": "token-meter",
       "source": "./plugins/token-meter",
-      "description": "Status-line-style band with per-request in/out tokens, prompt-cache hit rate and context fill (CLI)",
+      "description": "Status-line-style band with per-request in/out tokens, prompt-cache hit rate and context fill, in the CLI only",
       "category": "productivity"
     }
   ]

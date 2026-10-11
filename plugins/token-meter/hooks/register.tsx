@@ -20,12 +20,11 @@ const STYLE = {
 const blankAgent = (): AgentBucket => ({ last: empty(), type: 'agent', done: false })
 
 export const register: Register = on => {
-  // Drawn above the prompt; the atom writes below redraw it.
-  // Only the CLI shows `ctx`; the other surfaces draw their own context meter.
+  // Drawn above the prompt in the CLI only; the atom writes below redraw it.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const fill = e.surface === 'terminal' ? await read($, ctx) : null
-    const segs = line(await read($, last), await read($, agents), fill)
-    if (e.props.hasSurvey || segs === undefined) return next(e)
+    if (e.surface !== 'terminal' || e.props.hasSurvey) return next(e)
+    const segs = line(await read($, last), await read($, agents), await read($, ctx))
+    if (segs === undefined) return next(e)
     const { Box, Text } = $.ui.resolve(e)
     return (
       <Box marginTop={1}>

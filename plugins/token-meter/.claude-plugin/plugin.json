@@ -1,7 +1,7 @@
 {
   "name": "token-meter",
-  "version": "0.3.2",
-  "description": "Status-line-style band with per-request in/out tokens, prompt-cache hit rate and context fill (CLI)",
+  "version": "0.4.0",
+  "description": "Status-line-style band with per-request in/out tokens, prompt-cache hit rate and context fill, in the CLI only",
   "author": { "name": "keliwang", "email": "keliw2025@keli.im" },
   "homepage": "https://github.com/keliwang/agent-plugins/tree/main/plugins/token-meter",
   "repository": "https://github.com/keliwang/agent-plugins",

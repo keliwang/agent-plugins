@@ -1,6 +1,6 @@
 # token-meter
 
-A line above the prompt in the format of a Claude Code status line, the groups split by a wide gap:
+A line above the prompt in the CLI, in the format of a Claude Code status line, the groups split by a wide gap:
 
 ```
 in 1.2K out 300 | cache 4.0K hit 77% | ctx 12%   explore in 100 out 200 | cache 900 hit 90%
@@ -13,7 +13,7 @@ in 1.2K out 300 | cache 4.0K hit 77% | ctx 12%   explore in 100 out 200 | cache 
 - `out` output tokens
 - `cache` input tokens served from the prompt cache
 - `hit` cache reads over all input: green ≥ 80%, yellow ≥ 50%, red below
-- `ctx` context window fill, CLI only: yellow ≥ 70%, red ≥ 85%
+- `ctx` context window fill: yellow ≥ 70%, red ≥ 85%
 
 Subagents drop off the line once their run completes; `/clear` resets the line.
 
